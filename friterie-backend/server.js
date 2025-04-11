@@ -27,4 +27,8 @@ db.authenticate()
   .catch((err) => console.error("❌ Erreur de connexion :", err));
 
 const PORT = process.env.PORT || 5000;
+db.sync({ force: true }) // ⚠️ Cela va supprimer et recréer toutes les tables !
+  .then(() => console.log("✅ Base de données synchronisée avec succès !"))
+  .catch(err => console.error("❌ Erreur de synchronisation :", err));
+
 app.listen(PORT, () => console.log(`🚀 Serveur en cours sur le port ${PORT}`));

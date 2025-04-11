@@ -3,16 +3,27 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-const router = express.Router();
+const router = express.Router(); // ✅ indispensable
 
 // Inscription
 router.post("/register", async (req, res) => {
   const { nom, email, mot_de_passe, telephone, adresse } = req.body;
+  console.log("📥 Données reçues dans /register :", req.body);
+
   try {
     const hashedPassword = await bcrypt.hash(mot_de_passe, 10);
-    const user = await User.create({ nom, email, mot_de_passe: hashedPassword, telephone, adresse });
-    res.json(user);
+    const user = await User.create({
+      nom,
+      email,
+      mot_de_passe: hashedPassword,
+      telephone,
+      adresse
+    });
+
+    console.log("✅ Utilisateur enregistré :", user.dataValues);
+    res.status(201).json({ message: "Utilisateur créé avec succès", utilisateur: user });
   } catch (error) {
+    console.error("❌ Erreur lors de l'inscription :", error);
     res.status(500).json({ message: "Erreur serveur" });
   }
 });
